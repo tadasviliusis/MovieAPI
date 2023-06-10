@@ -13,6 +13,9 @@ public class Movie {
     private Date releaseDate;
     private float averageRating;
 
+    public Movie() {
+    }
+
     public Movie(String id, String titleType, String titleText, Integer beginYear, Integer endYear, Date releaseDate, float averageRating) {
         this.id = id;
         this.titleType = titleType;
@@ -23,59 +26,59 @@ public class Movie {
         this.averageRating = averageRating;
     }
 
-    public String id() {
-        return id;
-    }
-
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String titleType() {
-        return titleType;
     }
 
     public void setTitleType(String titleType) {
         this.titleType = titleType;
     }
 
-    public String titleText() {
-        return titleText;
-    }
-
     public void setTitleText(String titleText) {
         this.titleText = titleText;
     }
 
-    public Integer beginYear() {
-        return beginYear;
-    }
-
-    public void setBeginYear(int beginYear) {
+    public void setBeginYear(Integer beginYear) {
         this.beginYear = beginYear;
-    }
-
-    public Integer endYear() {
-        return endYear;
     }
 
     public void setEndYear(Integer endYear) {
         this.endYear = endYear;
     }
 
-    public Date releaseDate() {
-        return releaseDate;
-    }
-
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public float averageRating() {
-        return averageRating;
-    }
-
     public void setAverageRating(float averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getTitleType() {
+        return titleType;
+    }
+
+    public String getTitleText() {
+        return titleText;
+    }
+
+    public Integer getBeginYear() {
+        return beginYear;
+    }
+
+    public Integer getEndYear() {
+        return endYear;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public float getAverageRating() {
+        return averageRating;
     }
 }
