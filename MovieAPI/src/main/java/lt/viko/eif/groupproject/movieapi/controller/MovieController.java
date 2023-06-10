@@ -1,5 +1,6 @@
 package lt.viko.eif.groupproject.movieapi.controller;
 
+import lt.viko.eif.groupproject.movieapi.api.TitlesAPI;
 import lt.viko.eif.groupproject.movieapi.model.Movie;
 import lt.viko.eif.groupproject.movieapi.repository.MovieRepo;
 import org.springframework.hateoas.EntityModel;
@@ -33,6 +34,16 @@ public class MovieController {
     @GetMapping("/movies/search/{title}")
     public ResponseEntity<Map<String, String>> searchMovies(@PathVariable String title) throws IOException {
         Map<String, String> result = MovieRepo.searchMovieByTitle(title);
+        if (result != null && !result.isEmpty()) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/movie/{id}/cast")
+    public ResponseEntity<Map<String,  Map<String, String>>> getMovieActors(@PathVariable String id) throws IOException {
+        Map<String,  Map<String, String>> result = MovieRepo.getMovieCast(id);
         if (result != null && !result.isEmpty()) {
             return ResponseEntity.ok(result);
         } else {

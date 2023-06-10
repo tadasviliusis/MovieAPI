@@ -51,7 +51,7 @@ public class MovieRepo {
             JSONObject tempObject1 = new JSONObject(json);
             JSONArray tempObjectArr = tempObject1.getJSONArray("results");
             mainObjectArr.putAll(tempObjectArr);
-            if(tempObjectArr.length() != 10)
+            if(tempObjectArr.length() != 10 || page == 10 )
                 break;
             page++;
         }
@@ -70,6 +70,30 @@ public class MovieRepo {
         }
 
         return movieList;
+    }
+
+
+    public static Map<String,  Map<String, String>> getMovieCast(String id) throws IOException {
+        JSONArray mainObjectArr = new JSONArray();
+        String json = TitlesAPI.getTitleActors(id);
+        JSONObject tempObject1 = new JSONObject(json);
+        JSONArray tempObjectArr = tempObject1.getJSONObject("results").getJSONArray("roles");
+        mainObjectArr.putAll(tempObjectArr);
+
+        Map<String,  Map<String, String>> actorList = new HashMap<>();
+//{"message":"Endpoint '\movie\id\tt0848228\cast\' does not exist"}
+
+        for(int i = 0; i < mainObjectArr.length(); i++)
+        {
+            String role = mainObjectArr.getJSONObject(i).getString("role");
+            JSONObject actorTempObject = mainObjectArr.getJSONObject(i).getJSONObject("actor");
+            String actorId = actorTempObject.getString("imdb_id");
+            String actorName = actorTempObject.getString("name");
+            Map<String, String> temp = new HashMap<>();
+            temp.put(actorId, actorName);
+            actorList.put(role, temp);
+        }
+        return actorList;
     }
 
 }
