@@ -4,10 +4,13 @@ import lt.viko.eif.groupproject.movieapi.api.SearchAPI;
 import lt.viko.eif.groupproject.movieapi.api.TitlesAPI;
 import lt.viko.eif.groupproject.movieapi.model.Movie;
 
+import lt.viko.eif.groupproject.movieapi.model.MovieReview;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -96,4 +99,28 @@ public class MovieRepo {
         return actorList;
     }
 
+    public static List<MovieReview> getMovieUserReviews(String id) throws IOException, ParseException {
+        JSONObject tempObject = new JSONObject(TitlesAPI.getMovieUserReviews(id));
+        JSONArray tempArr = tempObject.getJSONArray("reviews");
+
+        List<MovieReview> reviewsList = new ArrayList<>();
+
+        for(int i = 0; i < tempArr.length(); i++)
+        {
+            String userId = tempArr.getJSONObject(i).getJSONObject("author").getString("userId");
+            userId.equals(userId.substring(1, 5));
+            userId.equals(userId.substring(userId.length() - 1));
+            String author = tempArr.getJSONObject(i).getJSONObject("author").getString("displayName");
+            String text = tempArr.getJSONObject(i).getString("reviewText");
+            String title = tempArr.getJSONObject(i).getString("reviewTitle");
+            String date = tempArr.getJSONObject(i).getString("submissionDate");
+            boolean isSpoiler = tempArr.getJSONObject(i).getBoolean("spoiler");
+
+            Date newDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+
+            MovieReview tempReview = new MovieReview(userId, author, title, text, isSpoiler, newDate);
+            reviewsList.add(tempReview);
+        }
+        return reviewsList;
+    }
 }
