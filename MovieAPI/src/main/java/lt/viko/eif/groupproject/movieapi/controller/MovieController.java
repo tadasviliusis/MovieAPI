@@ -30,7 +30,7 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/movie/search/{title}")
+    @GetMapping("/movies/search/{title}")
     public ResponseEntity<Map<String, String>> searchMovies(@PathVariable String title) throws IOException {
         Map<String, String> result = MovieRepo.searchMovieByTitle(title);
         if (result != null && !result.isEmpty()) {
