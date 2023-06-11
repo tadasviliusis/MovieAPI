@@ -1,27 +1,27 @@
 package lt.viko.eif.groupproject.movieapi.controller;
 
-import lt.viko.eif.groupproject.movieapi.model.Movie;
-import lt.viko.eif.groupproject.movieapi.model.MovieReview;
-import lt.viko.eif.groupproject.movieapi.model.Watchlist;
-import lt.viko.eif.groupproject.movieapi.repository.MovieRepo;
+import lt.viko.eif.groupproject.movieapi.repository.MovieReviewRepo;
 import lt.viko.eif.groupproject.movieapi.repository.UserRepo;
 import lt.viko.eif.groupproject.movieapi.repository.WatchlistRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class MovieController {
-    @Autowired
-    private UserRepo userRepo;
-    @Autowired
-    private WatchlistRepo watchlistRepo;
+
+    private final UserRepo userRepo;
+    private final MovieReviewRepo reviewRepo;
+    private final WatchlistRepo watchlistRepo;
+
+    public MovieController(UserRepo userRepo, MovieReviewRepo reviewRepo, WatchlistRepo watchlistRepo){
+        this.userRepo = userRepo;
+        this.reviewRepo = reviewRepo;
+        this.watchlistRepo = watchlistRepo;
+    }
 
     @GetMapping("/movies")
     String mainMethod() throws IOException {

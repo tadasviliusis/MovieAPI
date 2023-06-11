@@ -5,6 +5,7 @@ import lt.viko.eif.groupproject.movieapi.api.TitlesAPI;
 import lt.viko.eif.groupproject.movieapi.model.Movie;
 
 import lt.viko.eif.groupproject.movieapi.model.MovieReview;
+import lt.viko.eif.groupproject.movieapi.model.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -103,14 +104,26 @@ public class MovieRepo {
         JSONObject tempObject = new JSONObject(TitlesAPI.getMovieUserReviews(id));
         JSONArray tempArr = tempObject.getJSONArray("reviews");
 
+        String movieId = tempObject.getJSONObject("base").getString("id");
+        movieId = movieId.replace("/title/", "").replaceAll("/$", "");
+
         List<MovieReview> reviewsList = new ArrayList<>();
 
         for(int i = 0; i < tempArr.length(); i++)
         {
+            String reviewId = tempArr.getJSONObject(i).getString("id");
+            reviewId = reviewId.replace("/title/" + movieId + "/userreviews/rw", "");
+
             String userId = tempArr.getJSONObject(i).getJSONObject("author").getString("userId");
-            userId.equals(userId.substring(1, 5));
-            userId.equals(userId.substring(userId.length() - 1));
-            String author = tempArr.getJSONObject(i).getJSONObject("author").getString("displayName");
+            userId = userId.replace("/user/ur", "").replaceAll("/$", "");
+
+            String userName = tempArr.getJSONObject(i).getJSONObject("author").getString("displayName");
+
+            User author = new User();
+            author.setId(Long.parseLong(userId));
+            author.setUsername(userName);
+            author.setPassword("-");
+
             String text = tempArr.getJSONObject(i).getString("reviewText");
             String title = tempArr.getJSONObject(i).getString("reviewTitle");
             String date = tempArr.getJSONObject(i).getString("submissionDate");
@@ -118,7 +131,7 @@ public class MovieRepo {
 
             Date newDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
-            MovieReview tempReview = new MovieReview(userId, author, title, text, isSpoiler, newDate);
+            MovieReview tempReview = new MovieReview(Long.parseLong(reviewId), author, movieId, title, text, isSpoiler, newDate);
             reviewsList.add(tempReview);
         }
         return reviewsList;
