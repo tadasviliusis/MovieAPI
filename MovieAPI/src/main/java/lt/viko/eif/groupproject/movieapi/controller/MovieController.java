@@ -2,6 +2,7 @@ package lt.viko.eif.groupproject.movieapi.controller;
 
 import lt.viko.eif.groupproject.movieapi.database.MovieReviewRepo;
 import lt.viko.eif.groupproject.movieapi.database.UserRepo;
+import lt.viko.eif.groupproject.movieapi.database.WatchlistRepo;
 import lt.viko.eif.groupproject.movieapi.model.*;
 import lt.viko.eif.groupproject.movieapi.repository.MovieRepo;
 import org.springframework.http.ResponseEntity;
@@ -10,20 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class MovieController {
 
     private final UserRepo userRepo;
     private final MovieReviewRepo reviewRepo;
+    private final WatchlistRepo watchlistRepo;
 
-    public MovieController(UserRepo userRepo, MovieReviewRepo reviewRepo){
+    public MovieController(UserRepo userRepo, MovieReviewRepo reviewRepo, WatchlistRepo watchlistRepo){
         this.userRepo = userRepo;
         this.reviewRepo = reviewRepo;
+        this.watchlistRepo = watchlistRepo;
     }
 
     @GetMapping("/movies")
@@ -158,6 +158,39 @@ public class MovieController {
             return ResponseEntity.notFound().build();
         userRepo.deleteUserById(Id);
         return ResponseEntity.ok(true);
+    }
+
+    //get
+    @GetMapping("/{userId}/watchlist")
+    public ResponseEntity<Map<String,String>> getUserWatchlist(@PathVariable long userId){
+        List<Watchlist> list = watchlistRepo.findAllByCurrentUser(userId);
+        Map<String,String> map = new HashMap<>();
+        for (Watchlist watchlist:list) {
+            map.put(watchlist.getMovieId(),watchlist.getMovieName());
+        }
+        if (map != null && !map.isEmpty()) {
+            return ResponseEntity.ok(map);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //add
+    @PostMapping("/{userId}/add/{movieId}")
+    Watchlist addMovieToWatchlist(@PathVariable long userId, @PathVariable String movieId) throws IOException {
+        if(userRepo.findById(userId).isPresent()){
+            Movie movie = MovieRepo.getMovieById(movieId);
+            Watchlist newWatchlistItem = new Watchlist(movieId, movie.getTitleText(), userRepo.getReferenceById(userId));
+
+            return watchlistRepo.save(newWatchlistItem);
+        }
+        return null;
+    }
+
+    //delete
+    @DeleteMapping("/{userId}/delete/{movieId}")
+    public void deleteWatchlistItem(@PathVariable long userId, @PathVariable String movieId){
+        watchlistRepo.findByUserIDAndMovieID(userId,movieId);
     }
 
 }
