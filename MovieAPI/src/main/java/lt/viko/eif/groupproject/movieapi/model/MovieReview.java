@@ -1,10 +1,19 @@
 package lt.viko.eif.groupproject.movieapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
 public class MovieReview {
-    private String id;
-    private String author;
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    private User author;
+    private String movie;
     private String title;
     private String text;
     private boolean isSpoiler;
@@ -13,21 +22,26 @@ public class MovieReview {
     public MovieReview() {
     }
 
-    public MovieReview(String id, String author, String title, String text, boolean isSpoiler, Date submissionDate) {
+    public MovieReview(Long id, User author, String movie, String title, String text, boolean isSpoiler, Date submissionDate) {
         this.id = id;
         this.author = author;
+        this.movie = movie;
         this.title = title;
         this.text = text;
         this.isSpoiler = isSpoiler;
         this.submissionDate = submissionDate;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public void setMovie(String movie) {
+        this.movie = movie;
     }
 
     public void setTitle(String title) {
@@ -46,12 +60,15 @@ public class MovieReview {
         this.submissionDate = submissionDate;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
+    }
+    public String getMovie() {
+        return movie;
     }
 
     public String getTitle() {

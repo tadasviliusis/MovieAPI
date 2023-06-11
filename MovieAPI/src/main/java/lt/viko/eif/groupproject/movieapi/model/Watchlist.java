@@ -1,32 +1,27 @@
 package lt.viko.eif.groupproject.movieapi.model;
 
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
 public class Watchlist {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String movieId;
     private String movieName;
 
     @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
     private User user;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,7 +53,7 @@ public class Watchlist {
 
     }
 
-    public Watchlist(int id, String movieId, String movieName, User user) {
+    public Watchlist(Long id, String movieId, String movieName, User user) {
         this.id = id;
         this.movieId = movieId;
         this.movieName = movieName;
