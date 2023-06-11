@@ -1,4 +1,4 @@
-package lt.viko.eif.groupproject.movieapi.repository;
+package lt.viko.eif.groupproject.movieapi.database;
 
 import jakarta.transaction.Transactional;
 import lt.viko.eif.groupproject.movieapi.model.Watchlist;
@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WatchlistRepo extends JpaRepository<Watchlist, Long> {
     @Query("FROM Watchlist g where g.user.id = :userId")
