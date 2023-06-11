@@ -5,6 +5,7 @@ import lt.viko.eif.groupproject.movieapi.repository.UserRepo;
 import lt.viko.eif.groupproject.movieapi.model.*;
 import lt.viko.eif.groupproject.movieapi.repository.MovieRepo;
 import lt.viko.eif.groupproject.movieapi.repository.WatchlistRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,15 +16,13 @@ import java.util.*;
 @RestController
 public class MovieController {
 
-    private final UserRepo userRepo;
-    private final MovieReviewRepo reviewRepo;
-    private final WatchlistRepo watchlistRepo;
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private MovieReviewRepo reviewRepo;
+    @Autowired
+    private WatchlistRepo watchlistRepo;
 
-    public MovieController(UserRepo userRepo, MovieReviewRepo reviewRepo, WatchlistRepo watchlistRepo){
-        this.userRepo = userRepo;
-        this.reviewRepo = reviewRepo;
-        this.watchlistRepo = watchlistRepo;
-    }
 
     @GetMapping("/movies")
     String mainMethod() throws IOException {
