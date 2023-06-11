@@ -1,4 +1,4 @@
-package lt.viko.eif.groupproject.movieapi.database;
+package lt.viko.eif.groupproject.movieapi.repository;
 
 import lt.viko.eif.groupproject.movieapi.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
